@@ -27,6 +27,7 @@ export class ConsultaService {
     const consulta = this.consultaRepo.create({
       fecha: dto.fecha,
       motivo: dto.motivo,
+      mascotaId: dto.mascotaId,
       tratamientos,
     });
     return this.consultaRepo.save(consulta);
@@ -37,6 +38,7 @@ export class ConsultaService {
     if (!consulta) return null;
     consulta.fecha = dto.fecha;
     consulta.motivo = dto.motivo;
+    mascotaId: dto.mascotaId,
     consulta.tratamientos = await this.tratamientoRepo.findByIds(dto.tratamientoIds);
     return this.consultaRepo.save(consulta);
   }

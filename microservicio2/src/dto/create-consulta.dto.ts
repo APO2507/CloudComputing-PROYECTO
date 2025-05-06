@@ -9,4 +9,8 @@ export class CreateConsultaDto {
 
   @ApiProperty({ example: [1, 2], description: 'IDs de tratamientos relacionados' })
   tratamientoIds!: number[];
+
+  @ApiProperty({ example: 1, description: 'ID de la mascota asociada' })
+  mascotaId!: number;
+
 }

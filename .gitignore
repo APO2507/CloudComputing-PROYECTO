@@ -1,0 +1,23 @@
+# === Node.js ===
+node_modules/
+
+# === Python ===
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# === Entornos ===
+.env
+*.env
+
+# === Logs ===
+*.log
+
+# === Archivos temporales o del sistema ===
+.DS_Store
+Thumbs.db
+*.swp
+*.bak
+
+

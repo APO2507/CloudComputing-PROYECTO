@@ -1,0 +1,105 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: pacientes_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    networks:
+      - clinica-net
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: clinica_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    networks:
+      - clinica-net
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - clinica-net
+
+  ms1:
+    build:
+      context: ./microservicio1
+    container_name: ms1
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+    environment:
+      - DB_NAME=pacientes_db
+      - DB_USER=user
+      - DB_PASSWORD=password
+      - DB_HOST=postgres
+      - DB_PORT=5432
+    networks:
+      - clinica-net
+
+  ms2:
+    build:
+      context: ./microservicio2
+    container_name: ms2
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - DB_NAME=clinica_db
+    networks:
+      - clinica-net
+
+  ms3:
+    build:
+      context: ./microservicio3
+    container_name: ms3
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+    environment:
+      - Mongo__Connection=mongodb://mongo:27017
+      - Mongo__Database=VetImagesDb
+    networks:
+      - clinica-net
+
+  ms4:
+    build:
+      context: ./microservicio4
+    container_name: ms4
+    ports:
+      - "8004:8004"
+    depends_on:
+      - ms1
+      - ms2
+      - ms3
+    env_file:
+      - ./microservicio4/.env
+    networks:
+      - clinica-net
+
+networks:
+  clinica-net:
+    driver: bridge
+

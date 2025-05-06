@@ -1,0 +1,31 @@
+version: '3.8'
+services:
+  orquestador:
+    build: .
+    ports:
+      - "8004:8004"
+    depends_on:
+      - microservicio1
+      - microservicio2
+      - microservicio3
+    networks:
+      - red_microservicios
+
+  microservicio1:
+    image: tu_imagen_ms1
+    networks:
+      - red_microservicios
+
+  microservicio2:
+    image: tu_imagen_ms2
+    networks:
+      - red_microservicios
+
+  microservicio3:
+    image: tu_imagen_ms3
+    networks:
+      - red_microservicios
+
+networks:
+  red_microservicios:
+    driver: bridge
